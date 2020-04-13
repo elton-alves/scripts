@@ -1,0 +1,37 @@
+#!/bin/sh
+#
+# An example hook script to check the commit log message.
+# Called by "git commit" with one argument, the name of the file
+# that has the commit message.  The hook should exit with non-zero
+# status after issuing an appropriate message if it wants to stop the
+# commit.  The hook is allowed to edit the commit message file.
+#
+
+################################################################################
+# This example catches messages that do not match
+# a predefined pattern.
+################################################################################
+
+PATTERN=".*(#[0-9]+).*"
+
+if [ -z "${PATTERN}" ]; then
+	echo "Please define a match \$PATTERN"
+exit 1
+fi
+
+MSG_MATCH=$(cat $1 | grep -iEo "${PATTERN}")
+
+if [ "" = "$MSG_MATCH" ]; then
+
+	echo >&2 "####### INVALID COMMIT'S MSG #########"
+	echo >&2 ">> Commit msg should contains regex:"
+	echo >&2 ">> ${PATTERN}"
+	echo >&2 "######################################"
+	exit 1
+else
+		echo >&2 ">> Commit's msg OK"
+fi
+
+exit 0
+
+
