@@ -8,7 +8,7 @@
 #
 
 ################################################################################
-# This example catches messages that do not match
+# This example catches messages that do not matches
 # a predefined pattern.
 ################################################################################
 
