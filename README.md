@@ -6,16 +6,15 @@ necessary.
 
 ## Git Hooks
 
-For now two simple git hooks are available: 
+For now, two simples git hooks are available: 
 - `pre-commit` for check to a PATTERN in the commit message. \
   Default `PATTERN=".*(#[0-9]+).*"`
-- `pre-push` to apply full tests before push. Current used for \
-  java maven projects. 
+- `pre-push` to apply full tests before push. Applied for \
+  maven projects. 
 
 
-To install the hooks Just copy `git-hooks` folder to your git \
-project directory and run the following command from your \
-project root folder
+To install the hooks just copy `git-hooks` folder to your project\
+directory and run the following command from that place.
 
 ```bash
 ./git-hooks/install-hooks.sh
