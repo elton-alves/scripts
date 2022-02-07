@@ -29,7 +29,7 @@ git-bash terminal.
 
 To use this just:
 
-1. In a git-bash terminal
-2. `cp git-bash/.bash_profile`
+1. In a git-bash terminal clone this in your home folder
+2. `cp ${HOME}/scripts/git-bash/.bash_profile ${HOME}`
 3. Restart the git-bash terminal
 
