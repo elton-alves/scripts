@@ -2,8 +2,8 @@
 
 # Install all hooks in this scripts/git-hooks directory
 
-MY_PATH="$(dirname $0)"
-MY_NAME="$(basename $0)"
+MY_PATH="$(dirname $BASH_SOURCE)"
+MY_NAME="$(basename $BASH_SOURCE)"
 
 HOOKS=`ls $MY_PATH | grep -v $MY_NAME`
 echo "Found hooks: $HOOKS"
