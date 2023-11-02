@@ -12,8 +12,7 @@ if [ "$#" -ne 2 ]; then
 fi
 
 domain="$1"
-output="$2"
-output_folder="./$output"
+output_folder="$2"
 crt_chain_file="$output_folder/crt_chain.txt"
 domain_port="$domain:443"
 cn_pattern="CN\s*=\s*(.+),?"
