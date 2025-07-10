@@ -1,6 +1,6 @@
 SSH_KEY=${HOME}/.ssh/id_rsa
 
-agent_pid=`ps aux | grep ssh | head -n 1 | awk '{print $1}'`
+agent_pid=`ps aux | grep ssh-agent | grep -v "grep" | head -n 2 | awk '{print $1}'`
 
 if [ -z "${agent_pid}" ]; then
     eval $(ssh-agent -s)
@@ -16,7 +16,7 @@ else
 fi
 
 keys=`ssh-add -l`
-no_keys="The agent has no identities"
+no_keys="The agent has no identities."
 
 if [[ $keys == "${no_keys}" ]]; then
   ssh-add ${SSH_KEY}
