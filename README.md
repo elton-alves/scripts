@@ -46,3 +46,14 @@ available for that domain and save in the output dir.
 ```bash
 ./extract_certificates.sh example.com crts
 ```
+
+### SK6: Simple k6 
+A simple command-line interface to run k6 load tests with constant throughput.
+
+Example usage:
+```bash
+# 1 Request per second for 5 seconds to http://httpbin.org/
+sk6 -c 1 -d 5s -R 1 http://httpbin.org/
+```
+
+More details in the [README](sk6/README.md).
