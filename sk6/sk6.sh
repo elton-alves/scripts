@@ -1,9 +1,10 @@
 #!/bin/bash
 
-# wk6.sh
-# A simple wrapper script to run k6 tests with a wrk2-like command-line interface.
+# sk6.sh
+# A simple wrapper script to run k6 tests with a wrk-like command-line interface.
+# sk6 stands for "simple k6", expressing a simple k6 wrapper inspired by wrk command line interface.
 #
-# Usage: ./wk6.sh [-D] [-X <METHOD>] [-b <BODY_STRING> | -f <BODY_FILE>] -c <connections> -d <duration> -R <rate> [-H "Header: Value"]... <URL>
+# Usage: ./sk6.sh [-D] [-X <METHOD>] [-b <BODY_STRING> | -f <BODY_FILE>] -c <connections> -d <duration> -R <rate> [-H "Header: Value"]... <URL>
 #
 # Parameters:
 #   -D : Enable debug logging from the k6 script itself.
@@ -15,12 +16,12 @@
 #   -d <duration>: Duration of the test (e.g., "30s", "1m").
 #   -R <rate>: Target requests per second (constant throughput).
 #   -H "Header: Value": HTTP header to send with the request. Can be specified multiple times.
-#                        WARNING: Header values containing '|' will be parsed incorrectly.
-#   <URL>: The target HTTP URL for the GET request.
+#                        WARNING: Header values containing '|' will be parsed incorrectly if defined via -H.
+#   <URL>: The target HTTP URL for the request.
 #
 # Prerequisites:
 # - k6 must be installed and available in your PATH.
-# - This script expects 'wk6.test.js' to be in the same directory as the ORIGINAL wk6.sh file.
+# - This script expects 'sk6.test.js' to be in the same directory as the ORIGINAL sk6.sh file.
 
 # --- Most Robust Way to Determine the Script's Own Directory ---
 SOURCE="${BASH_SOURCE[0]}"
@@ -46,7 +47,6 @@ DEBUG_FLAG="false" # Default to false (debug disabled)
 declare -a HEADERS_ARRAY=() # Array to store multiple header strings
 
 # --- Parse Command Line Arguments ---
-# Added 'f:' to getopts for the body file option.
 while getopts "DX:b:f:c:d:R:H:" opt; do
   case "$opt" in
     D) # Debug flag
@@ -111,14 +111,14 @@ if [ -z "$TARGET_URL" ]; then
   exit 1
 fi
 
-# Check if wk6.test.js exists using its absolute path
+# Check if sk6.test.js exists using its absolute path
 if [ ! -f "$TEST_SCRIPT_PATH" ]; then
-  echo "Error: wk6.test.js not found at expected path: $TEST_SCRIPT_PATH"
-  echo "Please ensure 'wk6.test.js' is in the same directory as the ORIGINAL wk6.sh script file."
+  echo "Error: sk6.test.js not found at expected path: $TEST_SCRIPT_PATH"
+  echo "Please ensure 'sk6.test.js' is in the same directory as the ORIGINAL sk6.sh script file."
   exit 1
 fi
 
-# --- Body Content Resolution (NEW) ---
+# --- Body Content Resolution ---
 # If a body file is specified, read its content, overriding any -b string.
 BODY_SOURCE_INFO=""
 if [ -n "$REQUEST_BODY_FILE" ]; then
@@ -130,7 +130,6 @@ if [ -n "$REQUEST_BODY_FILE" ]; then
     echo "Error: Body file not readable: $REQUEST_BODY_FILE" >&2
     exit 1
   fi
-  # Read file content into REQUEST_BODY, overriding -b if it was set
   REQUEST_BODY="$(cat "$REQUEST_BODY_FILE")"
   BODY_SOURCE_INFO=" (from file: $REQUEST_BODY_FILE)"
 fi
@@ -142,7 +141,7 @@ IFS='|' K6_HTTP_HEADERS="${HEADERS_ARRAY[*]}"
 echo "Running k6 test with the following parameters:"
 echo "  URL: $TARGET_URL"
 echo "  Method: $HTTP_METHOD"
-if [ -n "$REQUEST_BODY" ]; then # Only show body if it's not empty
+if [ -n "$REQUEST_BODY" ]; then
   echo "  Body: \"$REQUEST_BODY\"$BODY_SOURCE_INFO"
 fi
 echo "  Duration: $DURATION"
@@ -157,14 +156,13 @@ fi
 echo ""
 
 # Initialize the k6 command as an array
-# This safely handles arguments with spaces or special characters without `eval`
 K6_CMD_ARGS=(
   k6 run
   "--env" "TARGET_URL=$TARGET_URL"
   "--env" "DURATION=$DURATION"
   "--env" "RATE=$RATE"
   "--env" "CONNECTIONS=$CONNECTIONS"
-  "--env" "HTTP_HEADERS=$K6_HTTP_HEADERS" # This is where the fix applies
+  "--env" "HTTP_HEADERS=$K6_HTTP_HEADERS"
   "--env" "K6_HTTP_METHOD=$HTTP_METHOD"
   "--env" "K6_REQUEST_BODY=$REQUEST_BODY"
 )

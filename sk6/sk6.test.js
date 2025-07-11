@@ -1,4 +1,4 @@
-// wk6.test.js
+// sk6.test.js
 // This k6 script performs HTTP requests with a constant arrival rate,
 // configured via environment variables, applying custom HTTP headers,
 // and dynamically selecting the HTTP method and request body.

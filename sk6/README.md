@@ -104,8 +104,9 @@ This example sends a POST request with a simple JSON payload. Note the need for 
 
 ```bash
 
-sk6 -X POST -c 1 -d 5s -R 1 \
+sk6 -D -X POST -c 1 -d 5s -R 1 \
   -H "Content-Type: application/json" \
+  -H "x-other-header: X" \
   -b '{"name": "k6", "value": 1}' \
   http://httpbin.org/post
 ```  
@@ -116,7 +117,7 @@ First, create a file named my_payload.json in your current directory:
 
 ```bash
 
-cat <<EOT > my_payload.json
+cat <<EOT > /tmp/my_payload.json
 {
   "product": "Laptop",
   "quantity": 1,
@@ -126,6 +127,6 @@ EOT
 
 sk6 -X POST -c 1 -d 5s -R 1 \
   -H "Content-Type: application/json" \
-  -f ./my_payload.json \
+  -f /tmp/my_payload.json \
   http://httpbin.org/post
 ```
