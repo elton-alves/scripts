@@ -56,4 +56,4 @@ Example usage:
 sk6 -c 1 -d 5s -R 1 http://httpbin.org/
 ```
 
-More details in the [README](sk6/README.md).
+More details in the [sk6 readme](sk6/README.md).

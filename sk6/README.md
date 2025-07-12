@@ -1,4 +1,4 @@
-# sk6:
+# SK6
 
 ###### Simple k6 Wrapper for HTTP Load Testing
 
